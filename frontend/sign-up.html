@@ -6,8 +6,8 @@
 </head>
 <body>
 <main class="sign-in-form">
-    <form action="/login" method="post">
-        <h1 style = "margin-bottom: 20px; margin-top: 0;">Log in</h1>
+    <form action="/signup" method="post">
+        <h1 style = "margin-bottom: 20px; margin-top: 0;">Register</h1>
         <div class="form-floating" style = "border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom:15px">
             <input
                 type="email"
@@ -27,6 +27,16 @@
                 placeholder=""
             />
             <label for="floatingPassword" class="form-label">Password</label>
+        </div>
+                <div class="form-floating" style = "border-top-left-radius: 0; border-top-right-radius: 0;margin-bottom:10px">
+            <input
+                type="text"
+                class="form-control"
+                name=""
+                id="phone"
+                placeholder="0412 345 678"
+            />
+            <label for="floatingPassword" class="form-label">Phone Number</label>
         </div>
         <button class = "btn btn-outline-primary" type="submit">Sign in</button>
     </form>

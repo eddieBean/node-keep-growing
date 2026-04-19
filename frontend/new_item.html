@@ -54,86 +54,28 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="#">Action</a></li>
                             <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#">Something else here</a></li>
                         </ul>
                     </li>
                 </ul>
-                <a class = "btn" href = "login.html" id = "login"><i class="fa-solid fa-arrow-right-to-bracket" style="font-size:40px;color:white"></i></a>
-                <a class = "btn" href = "sign-up.html" id = "signup"><i class="fa-solid fa-arrow-right-to-bracket" style="font-size:40px;color:brown"></i></a>
-                <a class = "btn" href = "login.html" id="usericon"><i class="fas fa-user" style="font-size:40px;color:white"></i></a>
+                <button class = "btn" href = "login.html"><i class="fas fa-user" style="font-size:40px;color:white"></i></button>
             </div>
         </div>
     </nav>
 
-    <div class="p-5 mb-4 bg-light rounded-3">
-        <div class="container-lg py-5">
-            <h1 class="display-5 fw-bold">Welcome to Keep Growing!</h1>
-            <p class="col-md-8 fs-4">Description of keep growing and the items it sells etc.</p>
-            <button class="btn btn-primary btn-lg" type="button">Featured Items</button>
-        </div>
-    </div>
-    
+    <div class = 'new-item-form'>
+        <form action = "/">
 
-    <div class="container">
-        <div class="row row-cols-4 justify-content-center" id = "items-container">
-        </div>
-    </div><!--/.container-->
+        </form>
+    </div>  
+
+
+
+
+
 
 
 </main>
-    <script>
-        async function loadItems(){
-            const container = document.getElementById("items-container")
-            
-            const response = await fetch('http://localhost:3000/api/items');
-            const items = await response.json();
-
-            items.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'col-md-2 col-sm-12';
-                card.innerHTML = `
-                <img 
-                    src="/images/${item.image}" 
-                    alt="${item.name}"   ,JYHRFN BC
-                    width="140" 
-                    height="140"
-                    class="bd-placeholder-img rounded"
-                    style="object-fit: cover;"
-                    onerror="this.src='/images/placeholder.jpg'"
-                />
-                <p class = "item">${item.description}</p>
-                <p><a class="btn btn-secondary" href="item.html/${item.itemID}">View Item &raquo;</a></p>
-                `;
-                container.appendChild(card)
-            });
-        }
-        document.addEventListener('DOMContentLoaded', loadItems);
-    </script>
-
-
-    <script>
-        async function updateNav() {
-            const res = await fetch('/api/session');
-            const data = await res.json();
-
-            const loginButton = document.getElementById('login');
-            const signupButton = document.getElementById('signup');
-            const userIcon = document.getElementById('usericon')
-
-            if (data.loggedIn) {
-                loginButton.style.display = 'block';
-                signupButton.style.display = 'block';
-                userIcon.style.display = 'block'
-            } else {
-                loginButton.style.display = 'block';
-                signupButton.style.display = 'block';
-                userIcon.style.display = 'none'
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', updateNav);
-    </script>
 </body>
-
-
 </html>
