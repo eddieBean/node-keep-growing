@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true })); // parses HTML form submissions
 app.use(express.json());                          // parses JSON requests
 app.use(session({
-  secret: process.env.SESSION_SECRET, // change this to something random
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false
 }));
@@ -26,6 +26,7 @@ app.use('/images', express.static(path.join(__dirname, '..', 'frontend', 'images
 app.post('/signup', async (req, res) =>{
   
   const {email, password, phone} = req.body;
+  console.log(req.body)
   try {
     //test if the email or phone number has already been used
     const[existingEmail] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
@@ -84,6 +85,7 @@ app.get('/logout', (req, res) => {
 
 // API endpoint returning items as JSON
 app.get('/api/items', async (req, res) => {
+  console.log(req.query.item)
   try {
     const [rows] = await db.query('SELECT * FROM items');
     res.json(rows);
@@ -100,7 +102,5 @@ app.get('/api/session', (req, res) => {
     res.json({ loggedIn: false });
   }
 });
-
-
 
 app.listen(3000, () => console.log('Server running on port 3000'));

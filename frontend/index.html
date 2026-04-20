@@ -94,7 +94,7 @@
                 card.innerHTML = `
                 <img 
                     src="/images/${item.image}" 
-                    alt="${item.name}"   ,JYHRFN BC
+                    alt="${item.name}"
                     width="140" 
                     height="140"
                     class="bd-placeholder-img rounded"
@@ -102,7 +102,7 @@
                     onerror="this.src='/images/placeholder.jpg'"
                 />
                 <p class = "item">${item.description}</p>
-                <p><a class="btn btn-secondary" href="item.html/${item.itemID}">View Item &raquo;</a></p>
+                <p><a class="btn btn-secondary" href="item.html?item=${item.item_id}">View Item &raquo;</a></p>
                 `;
                 container.appendChild(card)
             });
