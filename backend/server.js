@@ -26,7 +26,7 @@ app.use('/images', express.static(path.join(__dirname, '..', 'frontend', 'images
 app.post('/signup', async (req, res) =>{
   
   const {email, password, phone} = req.body;
-  console.log(req);
+  console.log(req.body.email, req.body.password, req.body.phone);
   try {
     //test if the email or phone number has already been used
     const[existingEmail] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
@@ -41,9 +41,9 @@ app.post('/signup', async (req, res) =>{
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await db.query(
-      'INSERT INTO users (email, password, phone) VALUES (?, ?)',
+      'INSERT INTO users (email, password, phone) VALUES (?, ?, ?)',
       [email, hashedPassword, phone]
-    );
+    );kjg
     req.session.userEmail = email;
     res.redirect('/');
 
@@ -55,7 +55,7 @@ app.post('/signup', async (req, res) =>{
 
 app.post('/login', async (req, res) =>{
   const { email, password} = req.body;
-
+  console.log("request: "+req.body.email + req.body.password);
   try {
     const [rows] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
     if(rows.length === 0){
@@ -63,6 +63,7 @@ app.post('/login', async (req, res) =>{
     }
 
     const user = rows[0];
+    console.log("db response: "+user.email+user.password);
 
     const match = await bcrypt.compare(password, user.password);
     if (!match){
