@@ -26,7 +26,7 @@ app.use('/images', express.static(path.join(__dirname, '..', 'frontend', 'images
 app.post('/signup', async (req, res) =>{
   
   const {email, password, phone} = req.body;
-  console.log(req.body)
+  console.log(req);
   try {
     //test if the email or phone number has already been used
     const[existingEmail] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
