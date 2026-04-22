@@ -107,11 +107,7 @@
                 container.appendChild(card)
             });
         }
-        document.addEventListener('DOMContentLoaded', loadItems);
-    </script>
-
-
-    <script>
+        
         async function updateNav() {
             const res = await fetch('/api/session');
             const data = await res.json();
@@ -132,6 +128,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', updateNav);
+        document.addEventListener('DOMContentLoaded', loadItems);
     </script>
 </body>
 

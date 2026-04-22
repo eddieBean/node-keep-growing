@@ -85,22 +85,21 @@
             </div>
         </div>
     </div>
-<script>
-    const response  = await fetch("/api/items");
-    const item = await response.json;
-    const nameLabel = Document.getElementById("name-label");
-    const descriptionLabel = Document.getElementById("description-label");
-    const priceLabel = Document.getElementById("price-label");
-
-    nameLabel.innerhtml = `${item.name}`
-
-</script>   
 </main>
 </body>
 <script>
-    
+    async function loadItem(){
+        const response = await fetch('http://localhost:3000/api/items');
+        const item = await response.json();
+        console.log("item data: ", item);
 
-
-
-</script>
+        const nameLabel = Document.getElementById("name-label");
+        const descriptionLabel = Document.getElementById("description-label");
+        const priceLabel = Document.getElementById("price-label");
+        nameLabel.innerhtml = `<b>${item.name}</b>`;
+        descriptionLabel.innerhtml = `${item.description}`;
+        priceLabel.innerhtml = `${item.price}`;
+    }
+    document.addEventListener('DOMContentLoaded',loadItem);
+</script>   
 </html>    
