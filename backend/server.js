@@ -38,14 +38,8 @@ app.post('/signup', async (req, res) => {
             return res.send('An account with that phone number already exists')
         }
         //hash the password before storing it in the db
-
-        bcrypt.genSalt(10, function (err, salt) {
-            bcrypt.hash(password, salt, function (err, hash) {
-                console.log("here");
-                var hashedPassword = hash;
-
-            });
-        });
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         db.query(
             'INSERT INTO users (email, password, phone) VALUES (?, ?, ?)',
@@ -72,17 +66,17 @@ app.post('/login', async (req, res) => {
         const user = rows[0];
         console.log("db response: " + user.email + user.password);
 
-        const match = await bcrypt.compare(password, user.password);
+        const match = await bcrypt.compare(password, user.password.toString());
         if (!match) {
             return res.send('Incorrect Password');
         }
 
         req.session.userEmail = email;
-        res.redirect('/frontend/index.html');
+        res.redirect('/');
 
     } catch (err) {
-        console.error('Signup error', err.message);
-        res.status(500).send('Signup failed')
+        console.error('login error', err.message);
+        res.status(500).send('login failed')
     }
 });
 
