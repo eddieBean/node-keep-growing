@@ -70,7 +70,6 @@ app.post('/login', async (req, res) => {
         if (!match) {
             return res.send('Incorrect Password');
         }
-
         req.session.userEmail = email;
         res.redirect('/');
 
@@ -87,7 +86,6 @@ app.get('/logout', (req, res) => {
 
 // API endpoint returning items as JSON
 app.get('/api/items', async (req, res) => {
-    console.log(req.query.item)
     try {
         const [rows] = await db.query('SELECT * FROM items');
         res.json(rows);
@@ -97,11 +95,28 @@ app.get('/api/items', async (req, res) => {
     }
 });
 
+app.get('api/itemContent/:itemId', async (req, res) => {
+    console.log('freaky');
+    const itemId = req.params.itemId;
+    try{
+        const [rows] = await db.query('SELECT * FROM items WHERE item_id = ?}', [itemId]);
+        res.json(rows);
+    } catch (err) {
+        console.error('database error:' + err.message);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
+
 app.get('/api/session', (req, res) => {
-    if (req.session.user) {
-        res.json({ loggedIn: true, user: req.session.user });
+    console.log(req.session.userEmail);
+    if (req.session.userEmail !== null) {
+        console.log("logged in");
+        res.json({ loggedIn: true, user: req.session.userEmail });
     } else {
+        console.log("logged out");
         res.json({ loggedIn: false });
+        
     }
 });
 

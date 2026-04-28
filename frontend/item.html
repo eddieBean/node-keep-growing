@@ -90,8 +90,9 @@
 <script>
     async function loadItem(){
         const response = await fetch('http://localhost:3000/api/items');
-        const item = await response.json();
-        console.log("item data: ", item);
+        const items = await response.json();
+        const item = items[0];
+        console.log("item data: ", item.description);
 
         const nameLabel = Document.getElementById("name-label");
         const descriptionLabel = Document.getElementById("description-label");
