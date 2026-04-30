@@ -3,10 +3,12 @@
     <title>Sign Up - Keep Growing</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="loginStyle.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/ea958534a3.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
 <main class="sign-in-form">
-    <form action="/signup" method="POST">
+    <form id="signUpForm">
         <h1 style = "margin-bottom: 20px; margin-top: 0;">Register</h1>
         <div class="form-floating" style = "border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom:15px">
             <input
@@ -41,5 +43,45 @@
         </div>
         <button class = "btn btn-outline-primary" type="submit">Sign in</button>
     </form>
+        <div class="alert alert-danger d-flex align-items-center" role="alert" id="errorAlert" style="display: none !important; margin-top: 20px;">
+        <i class="fa-solid fa-triangle-exclamation bi flex-shrink-0 me-2" style="width: 24px; height: 24px;"></i>
+        <div id="errorMessage" style="margin-left: 10px;"></div>
+    </div>
+        <p style="margin-top: 20px;">Already registered? <a href="login.html">Log in here.</a></p>
+
 </main>
+
+<script>
+    document.getElementById('signUpForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData);
+        
+        try {
+            const response = await fetch('/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+                redirect: 'manual'
+            });
+            
+            const text = await response.text();
+            
+            if (response.status === 302 || response.status === 301) {
+                // Success - redirect to home
+                window.location.href = '/';
+            } else {
+                // Error - show alert with error message
+                document.getElementById('errorMessage').textContent = text;
+                document.getElementById('errorAlert').style.display = 'flex';
+            }
+        } catch (err) {
+            console.error('Login error:', err);
+            document.getElementById('errorMessage').textContent = 'An error occurred. Please try again.';
+            document.getElementById('errorAlert').style.display = 'flex';
+        }
+    });
+</script>
 </body>
+</html>
