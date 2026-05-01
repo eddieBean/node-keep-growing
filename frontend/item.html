@@ -100,7 +100,7 @@
         }
 
         console.log("fetching item " + itemId);
-        const response = await fetch(`/api/items/${itemId}`);
+        const response = await fetch(`/api/items/itemId/${itemId}`);
         const items = await response.json();
         console.log("item response: ", items);
 
@@ -108,7 +108,6 @@
             console.error('Item not found');
             return;
         }
-
         const item = items[0];
         const nameLabel = document.getElementById("name-label");
         const descriptionLabel = document.getElementById("description-label");

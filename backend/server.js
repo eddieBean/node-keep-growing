@@ -107,7 +107,7 @@ app.get('/api/items/:search', async (req, res) => {
     }
 });
 
-app.get('/api/items/:itemId', async (req, res) => {
+app.get('/api/items/itemId/:itemId', async (req, res) => {
     const itemId = req.params.itemId;
     try{
         const [rows] = await db.query('SELECT * FROM items WHERE item_id = ?', [itemId]);
