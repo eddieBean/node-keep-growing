@@ -2,6 +2,12 @@
 <html>
 <head>
     <title>Keep Growing</title>
+    <link rel="icon" type="image/png" href="/siteIcons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/siteIcons/favicon.svg" />
+    <link rel="shortcut icon" href="/siteIcons/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/siteIcons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="Keep Growing" />
+    <link rel="manifest" href="/siteIcons/site.webmanifest" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/ea958534a3.js" crossorigin="anonymous"></script>
@@ -19,7 +25,7 @@
     <nav class="navbar navbar-expand-md navbar-dark bg-dark" aria-label="main navbar">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href = "#">Keep Growing</a>
+                <a class="navbar-brand" href = "index.html"><img class="rounded" style="width: 60px; height: 60px;" src="/siteIcons/keepGrowingIcon.svg"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -30,42 +36,19 @@
                         <a href="#" class="nav-link active">Home</a><!--change to search bar-->
                     </li> 
                     <li class="nav-item">
-                        <a href="#" class="nav-link">About Us</a>
+                        <a href="new_item.html" class="nav-link">New listing</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Contact Us</a>
+                        <a href="my_items.html" class="nav-link">My items</a>
                     </li>
                 </ul>
-                <form class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <a class = "btn me-2" href = "login.html" id = "login"><i class="fa-solid fa-arrow-right-to-bracket" style="font-size:40px;color:white"></i></a>
+                <button class = "btn me-2" id="usericon" type = "button" onclick="logout()"><i class="fas fa-user" style="font-size:40px;color:white"></i></button>
+                <form class="d-flex" id = "searchForm">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search" id = "searchInput">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             <div>
-        </div>
-    </nav>
-
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark" aria-label="searchFilters">
-        <div class="container-fluid">
-            <div class="collapse navbar-collapse" id="searchFilters">
-                <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link active">All</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <a class = "btn" href = "login.html" id = "login"><i class="fa-solid fa-arrow-right-to-bracket" style="font-size:40px;color:white"></i></a>
-                <a class = "btn" href = "sign-up.html" id = "signup"><i class="fa-solid fa-arrow-right-to-bracket" style="font-size:40px;color:brown"></i></a>
-                <button class = "btn" id="usericon" type = "button" onclick="logout"><i class="fas fa-user" style="font-size:40px;color:white"></i></button>
-            </div>
         </div>
     </nav>
 
@@ -77,19 +60,33 @@
             <h1 class = "display-1" id = "name-label">Item name</h1>
             <h2 class = "content">Description</h2>
             <p class = "content" id = "description-label">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-            <div class = "content d-flex justify-content-between">
-                <div>
-                    <p>Price</p>
-                </div>
-                <div>
-                    <p id = "price-label">$20</p>
+            <div id="container">
+                <div class = "content d-flex justify-content-between">
+                    <div>
+                        <p>Price</p>
+                    </div>
+                    <div>
+                        <p id = "price-label">$20</p>
+                    </div>
                 </div>
             </div>
+            <form id="message-form" class = "mt-5">
+                <div class="mb-3">
+                    <label for="message" class="form-label">Contact seller</label>
+                    <textarea class="form-control" id="content" name = "content" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            <form>        
         </div>
     </div>
 </main>
 </body>
 <script>
+    function toTitleCase(str){
+        return str.replace(/\w\S*/g, function(txt){
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+    }
     async function loadItem(){
         const params = new URLSearchParams(window.location.search);
         const itemId = params.get('itemId');
@@ -115,8 +112,34 @@
         const image = document.getElementById("image");
         nameLabel.innerHTML = `<b>${item.name}</b>`;
         descriptionLabel.innerHTML = `${item.description}`;
-        priceLabel.innerHTML = `${item.price}`;
+        priceLabel.innerHTML = `$${item.price}`;
         image.src = `/images/${item.image}`;
+        const notNullKeys = ['item_id', 'owner_id', 'price', 'description', 'name', 'image'];        
+        const validKeys = [];
+        for (const key in item) {
+            if (item[key] !== null && item[key] !== undefined && item[key] !== "" && !notNullKeys.includes(key)) {
+                console.log("valid key: ", key);
+                validKeys.push(key);
+            }
+        }
+
+        const container = document.getElementById("container");
+        validKeys.forEach(key => {
+            const label = document.createElement('div');
+            label.className = 'content d-flex justify-content-between';
+            presentableKey = toTitleCase(key);
+            label.innerHTML = `
+                <div>
+                    <p>${presentableKey}</p>
+                </div>
+                <div>
+                    <p>${item[key]}</p>
+                </div>
+            `;
+            container.appendChild(label);
+        });
+
+
     }
     async function updateNav() {
         const res = await fetch('/api/session');
@@ -135,6 +158,48 @@
             loginButton.style.display = 'block';
             signupButton.style.display = 'block';
             userIcon.style.display = 'none'
+        }
+    }
+    (function(){
+        "use strict"
+        const form = document.getElementById('message-form');
+        if(form){
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                await checkLogin();
+                const formData = new FormData(event.target);
+                const data = Object.fromEntries(formData);
+                const currUser = await (await fetch('/api/session')).json();
+                data.senderId = currUser.userId;
+                data.itemId = new URLSearchParams(window.location.search).get('itemId');
+                const recipientRows = await (await fetch(`/api/items/itemId/${data.itemId}`)).json();
+                data.recipientId = recipientRows[0].owner_id;
+                console.log("message data: ", data);
+                try {
+                    const response = await fetch('/sendEmail', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(data)
+                    });
+                    const result = await response.json();
+                    if (response.ok && result.success) {
+                        alert('Message sent successfully!');
+                    } else {
+                        alert('Failed to send message. Please try again. Error: ' + result.message);
+                    }
+                } catch (err) {
+                    console.error('Error sending message:', err);
+                    alert('An error occurred while sending the message. Please try again later.');
+                }
+            });
+        }
+    })();
+    async function checkLogin() {
+        const response = await fetch('/api/session');
+        const data = await response.json();
+        if (!data.userId) {
+            alert('You must be logged in to post an item.');
+            window.location.href = 'login.html';
         }
     }
     document.addEventListener('DOMContentLoaded',updateNav);
