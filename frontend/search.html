@@ -22,7 +22,7 @@
     <nav class="navbar navbar-expand-md navbar-dark bg-dark" aria-label="main navbar">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href = "index.html">Keep Growing</a>
+                <a class="navbar-brand" href = "index.html"><img class="rounded" style="width: 60px; height: 60px;" src="/siteIcons/keepGrowingIcon.svg"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -33,42 +33,19 @@
                         <a href="#" class="nav-link active">Home</a><!--change to search bar-->
                     </li> 
                     <li class="nav-item">
-                        <a href="#" class="nav-link">About Us</a>
+                        <a href="new_item.html" class="nav-link">New listing</a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">Contact Us</a>
+                        <a href="my_items.html" class="nav-link">My items</a>
                     </li>
                 </ul>
-                <a class = "btn" href = "login.html" id = "login"><i class="fa-solid fa-arrow-right-to-bracket" style="font-size:40px;color:white"></i></a>
-                <!-- <a class = "btn" href = "sign-up.html" id = "signup"><i class="fa-solid fa-arrow-right-to-bracket" style="font-size:40px;color:brown"></i></a> -->
-                <button class = "btn" id="usericon" type = "button" onclick="logout()"><i class="fas fa-user" style="font-size:40px;color:white"></i></button>
-                <form class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <a class = "btn me-2" href = "login.html" id = "login"><i class="fa-solid fa-arrow-right-to-bracket" style="font-size:40px;color:white"></i></a>
+                <button class = "btn me-2" id="usericon" type = "button" onclick="logout()"><i class="fas fa-user" style="font-size:40px;color:white"></i></button>
+                <form class="d-flex" id = "searchForm">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search" id = "searchInput">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             <div>
-        </div>
-    </nav>
-
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark" aria-label="searchFilters">
-        <div class="container-fluid">
-            <div class="collapse navbar-collapse" id="searchFilters">
-                <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                    <li class="nav-item">
-                        <a href="#" class="nav-link active">All</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Dropdown
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Action</a></li>
-                            <li><a class="dropdown-item" href="#">Another action</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
         </div>
     </nav>
 
@@ -112,37 +89,42 @@
             });
         }
         
-        async function updateNav() {
-            const res = await fetch('/api/session');
-            const data = await res.json();
-            console.log(data.user);
+    //-----------------------------|
+    // Nav Bar functionality-------|
+    //-----------------------------|
+    async function updateNav() {
+        const res = await fetch('/api/session');
+        const data = await res.json();
+        console.log(data.user);
 
-            const loginButton = document.getElementById('login');
-            // const signupButton = document.getElementById('signup');
-            const userIcon = document.getElementById('usericon')
+        const loginButton = document.getElementById('login');
+        const userIcon = document.getElementById('usericon')
 
-            if (data.loggedIn) {
-                loginButton.style.display = 'none';
-                // signupButton.style.display = 'none';
-                userIcon.style.display = 'block'
-            } else {
-                loginButton.style.display = 'block';
-                // signupButton.style.display = 'block';
-                userIcon.style.display = 'none'
-            }
+        if (data.loggedIn) {
+            loginButton.style.display = 'none';
+            userIcon.style.display = 'block'
+        } else {
+            loginButton.style.display = 'block';
+            userIcon.style.display = 'none'
         }
+    }
 
-        async function logout() {
-            try {
-                await fetch('/logout');
-                window.location.href = '/';
-            } catch (error) {
-                console.error('error logging out: ', error);
-            }
+    async function logout() {
+        try {
+            await fetch('/logout');
+            window.location.href = '/';
+        } catch (error) {
+            console.error('error logging out: ', error);
         }
-
-        document.addEventListener('DOMContentLoaded', updateNav);
-        document.addEventListener('DOMContentLoaded', loadItems);
+    }
+    document.getElementById('searchForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const searchQuery = formData.get('search');
+        window.location.href = `search.html?search=${searchQuery}`;
+    });
+    document.addEventListener('DOMContentLoaded', updateNav);
+    document.addEventListener('DOMContentLoaded', loadItems);
     </script>
 </body>
 

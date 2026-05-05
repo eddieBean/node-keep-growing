@@ -82,7 +82,7 @@
                 redirect: 'manual'
             });
             
-            const text = await response.text();
+            const text = await response.json();
             
             if (response.status === 302 || response.status === 301) {
                 // Success - redirect to home
