@@ -24,6 +24,7 @@
                 name="email"
                 aria-describedby="emailHelpId"
                 placeholder="abc@mail.com"
+                required
             />
             <label for="floatingInput" class="form-label">Email</label>
         </div>        
@@ -34,19 +35,28 @@
                 name="password"
                 id="password"
                 placeholder=""
+                required
+                min-length = 8
             />
             <label for="floatingPassword" class="form-label">Password</label>
         </div>
         <div class="form-floating" style = "border-top-left-radius: 0; border-top-right-radius: 0;margin-bottom:10px">
-            <input
-                type="text"
-                class="form-control"
-                name="phone"
-                id="phone"
-                placeholder="0412 345 678"
-            />
+            <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupPrepend">$</span>
+                    </div>
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="phone"
+                        id="phone"
+                        placeholder="0412 345 678"
+                    />
+            </div>
             <label for="floatingPassword" class="form-label">Phone Number</label>
+
         </div>
+
         <button class = "btn btn-outline-primary" type="submit">Sign in</button>
     </form>
         <div class="alert alert-danger d-flex align-items-center" role="alert" id="errorAlert" style="display: none !important; margin-top: 20px;">

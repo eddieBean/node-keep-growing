@@ -106,13 +106,15 @@
             return;
         }
         const item = items[0];
+        const expoPrice = Number.parseFloat(item.price).toExponential(3)
+
         const nameLabel = document.getElementById("name-label");
         const descriptionLabel = document.getElementById("description-label");
         const priceLabel = document.getElementById("price-label");
         const image = document.getElementById("image");
         nameLabel.innerHTML = `<b>${item.name}</b>`;
         descriptionLabel.innerHTML = `${item.description}`;
-        priceLabel.innerHTML = `$${item.price}`;
+        priceLabel.innerHTML = `$${expoPrice}`;
         image.src = `/images/${item.image}`;
         const notNullKeys = ['item_id', 'owner_id', 'price', 'description', 'name', 'image'];        
         const validKeys = [];

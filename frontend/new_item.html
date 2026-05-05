@@ -169,23 +169,9 @@
                 else{
                     event.preventDefault();
                     const formData = new FormData(form);
-                    // const imageFile = formData.get('image');
-                    // const formDataImage = new FormData();
-                    // formDataImage.append('image', imageFile);
-                    // const imageResponse = await fetch('/api/items/upload/image', {
-                    //     method: 'POST',
-                    //     body: formDataImage
-                    // });
-                    
-                    // if (imageResponse.ok){
-                        // const imageResult = await imageResponse.json();
-                        // formData.delete('image');
-                        // formData.append('image_url', imageResult.imageUrl);
-                    
                     const sessionResponse = await fetch('/api/session');
                     const sessionData = await sessionResponse.json();
                     formData.append('owner_id', sessionData.userId);
-                    // const data = Object.fromEntries(formData.entries());
                     const response = await fetch('/api/items/upload', {
                         method: 'POST',
                         body: formData
@@ -199,10 +185,6 @@
                         alert('Failed to list item. Please try again. Error: ' + result.message);
                     }
 
-                // }else{
-                //     const imageResult = await imageResponse.json();
-                //     alert('Image upload failed. Please try again. Error: ' + imageResult.message);
-                // }
             }
             form.classList.add('was-validated');
             });

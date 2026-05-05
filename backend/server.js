@@ -57,12 +57,12 @@ app.post('/signup', async (req, res) => {
             'INSERT INTO users (email, password, phone) VALUES (?, ?, ?)',
             [email, hashedPassword, phone]
         );
-        req.session.userId = user.user_id;
-        req.session.userEmail = email;
+        const userRows = await db.query('SELECT * FROM users WHERE email = ?', [email])
+        req.session.user = userRows[0];
         res.json({ success: true, message: 'Signup successful' });
 
     } catch (err) {
-        console.error('Signup error', err.message);
+        console.error('[SIGNUP] Signup error', err.message);
         res.status(500).json({ success: false, message: 'Signup failed' })
     }
 });
@@ -151,7 +151,7 @@ app.post('/api/items/upload', async (req, res) => {
 
 
 
-    const { name, description, price, condition, size, ISBN, image_url, owner_id} = req.body;
+    const { name, description, price, condition, size, ISBN, owner_id} = req.body;
     console.log('[UPLOAD/ITEM] Request received with data:', { name, description, price, condition, size, ISBN, image_url, owner_id });
     try {
         console.log('[UPLOAD/ITEM] Inserting item into database...');
@@ -238,9 +238,9 @@ app.post('/sendEmail', async (req, res) => {
 
 app.get('/api/session', (req, res) => {
     // console.log(req.session.userEmail);
-    if (typeof req.session.userEmail === 'string') {
-        console.log("logged in");
-        res.json({ loggedIn: true, user: req.session.userEmail, userId: req.session.userId });
+    if (req.session.user !== null && req.session.user !== undefined) {
+        console.log(req.session.user.email == "logged in");
+        res.json({ loggedIn: true, user: req.session.user.userEmail, userId: req.session.user.user_id});
     } else {
         console.log("logged out");
         res.json({ loggedIn: false });
