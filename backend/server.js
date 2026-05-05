@@ -256,32 +256,6 @@ app.post('/api/items/upload', async (req, res) => {
 
 });
 
-//[DEPRECATED] image upload endpoint - handled within item upload endpoint
-app.post('/api/items/upload/image', async (req, res) => {
-    console.log('[UPLOAD/IMAGE] Request received');
-    if (!req.files || Object.keys(req.files).length === 0) {
-        console.log('[UPLOAD/IMAGE] No files provided in request');
-        return res.status(500).json({ success: false, message: 'No file uploaded' });
-    }
-
-    const uploadedImage = req.files.image;
-    console.log(`[UPLOAD/IMAGE] File received: ${uploadedImage.name}, Size: ${uploadedImage.size} bytes`);
-
-    const uploadPath = path.join(__dirname, '..', 'frontend', 'images', uploadedImage.name);
-    console.log(`[UPLOAD/IMAGE] Target path: ${uploadPath}`);
-
-    try {
-        await uploadedImage.mv(uploadPath);
-        const imageUrl = `/images/${uploadedImage.name}`;
-        console.log(`[UPLOAD/IMAGE] Success - File saved to: ${uploadPath}, URL: ${imageUrl}`);
-        res.json({ success: true, message: 'Image uploaded successfully', imageUrl: imageUrl });
-
-    } catch (err) {
-        console.error(`[UPLOAD/IMAGE] Error moving file: ${err.message}`);
-        res.status(500).json({ success: false, message: 'Image upload failed' });
-    }
-});
-
 //emailing endpoint
 app.post('/sendEmail', async (req, res) => {
     const { senderId, recipientId, itemId, content } = req.body;
