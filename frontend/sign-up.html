@@ -18,6 +18,28 @@
         <h1 style = "margin-bottom: 20px; margin-top: 0;">Register</h1>
         <div class="form-floating" style = "border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom:15px">
             <input
+                type="text"
+                class="form-control"
+                id="username"
+                name="username"
+                placeholder="johndoe123"
+                required
+            />
+            <label for="floatingInput" class="form-label">Username</label>
+        </div>
+        <div class="form-floating" style = "border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom:15px">
+            <input
+                type="text"
+                class="form-control"
+                id="school"
+                name="school"
+                placeholder="My School"
+                required
+            />
+            <label for="school" class="form-label">Enter all the schools you want to see items from</label>
+        </div>
+        <div class="form-floating" style = "border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom:15px">
+            <input
                 type="email"
                 class="form-control"
                 id="email"
@@ -40,21 +62,14 @@
             />
             <label for="floatingPassword" class="form-label">Password</label>
         </div>
-        <div class="form-floating" style = "border-top-left-radius: 0; border-top-right-radius: 0;margin-bottom:10px">
+        <div class="form-floating" style="border-top-left-radius: 0; border-top-right-radius: 0;margin-bottom:10px">
+            <label for="phone" class="form-label">Phone Number</label>
             <div class="input-group">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroupPrepend">$</span>
-                    </div>
-                    <input
-                        type="text"
-                        class="form-control"
-                        name="phone"
-                        id="phone"
-                        placeholder="0412 345 678"
-                    />
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupPrepend">+61</span>
+                </div>
+                <input type="text" class="form-control" name="phone" id="phone" placeholder="412 345 678" />
             </div>
-            <label for="floatingPassword" class="form-label">Phone Number</label>
-
         </div>
 
         <button class = "btn btn-outline-primary" type="submit">Sign in</button>

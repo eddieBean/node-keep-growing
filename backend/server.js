@@ -65,7 +65,7 @@ async function initEmailer() {
     try {
         console.log('Attempting to create test email account...');
         testAccount = await nodemailer.createTestAccount();
-        console.log('✓ Test account created:', testAccount.user);
+        console.log('[EMAILER] Test account created:', testAccount.user);
         
         emailer = nodemailer.createTransport({
             host: 'smtp.ethereal.email',
@@ -79,10 +79,10 @@ async function initEmailer() {
         
         // Verify the connection
         await emailer.verify();
-        console.log('✓ Email service initialized and verified');
+        console.log('[EMAILER] Email service initialized and verified');
         return true;
     } catch (err) {
-        console.error('Error initializing email service:', err.message);
+        console.error('[EMAILER] Error initializing email service:', err.message);
         emailer = null;
         return false;
     }
@@ -91,7 +91,7 @@ async function initEmailer() {
 // Wait for emailer to initialize, then start server
 initEmailer().then(success => {
     if (!success) {
-        console.warn('⚠ Warning: Email service failed to initialize, email features will not work');
+        console.warn('Warning: Email service failed to initialize, email features will not work');
     }
     setTimeout(() => {
         app.listen(3000, () => console.log('Server running on port 3000'));
@@ -279,7 +279,7 @@ app.post('/sendEmail', async (req, res) => {
     }
     
     if (!emailer) {
-        return res.status(500).json({ success: false, message: 'Email service not ready' });
+        return res.status(500).json({ success: false, message: '[EMAILER] Email service not ready' });
     }
     
     const mail = {
