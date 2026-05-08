@@ -182,6 +182,18 @@ app.get('/api/items', async (req, res) => {
     }
 });
 
+// API endpoint specific user's items as JSON
+app.get('/api/user-items', async (req, res) => {
+    try {
+        const [rows] = await db.query('SELECT * FROM items WHERE owner_id = ?', [req.session.user.user_id]);
+        const sanitizedItems = rows.map(sanitizeItem);
+        res.json(sanitizedItems);
+    } catch (err) {
+        console.error('Database error:', err.message);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
 // Search Endpoint
 app.get('/api/items/:search', async (req, res) => {
     const searchTerm = req.params.search;
@@ -226,25 +238,26 @@ app.post('/api/items/upload', async (req, res) => {
 
 
 
-    const {name, description, price, condition, size, ISBN, owner_id} = req.body;
+    const {name, description, price, condition, size, ISBN, school, owner_id} = req.body;
     // Sanitize user input to prevent XSS
     const sanitizedName = escapeHtml(name);
     const sanitizedDescription = escapeHtml(description);
     const sanitizedCondition = escapeHtml(condition);
     const sanitizedSize = escapeHtml(size);
     const sanitizedISBN = escapeHtml(ISBN);
+    const sanitizedSchool = escapeHtml(school);
     
     console.log('[UPLOAD/ITEM] Request received with data:', { name, description, price, condition, size, ISBN, image_url, owner_id });
     try {
         console.log('[UPLOAD/ITEM] Inserting item into database...');
         await db.query(
             'INSERT INTO items (`name`, `description`, `price`, `condition`, `size`, `isbn`, `image`, `owner_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            [sanitizedName, sanitizedDescription, price, sanitizedCondition, sanitizedSize, sanitizedISBN, image_url, owner_id]
+            [sanitizedName, sanitizedDescription, price, sanitizedCondition, sanitizedSize, sanitizedISBN, image_url, sanitizedSchool, owner_id]
         );
         console.log('[UPLOAD/ITEM] Success - Item inserted into database');
         try {
             await uploadedImage.mv(uploadPath);
-            console.log(`[UPLOAD/IMAGE] Success - File saved to: ${uploadPath}, URL: ${imageUrl}`);
+            console.log(`[UPLOAD/IMAGE] Success - File saved to: ${uploadPath}, URL: ${image_url}`);
         } catch (err) {
             console.error(`[UPLOAD/IMAGE] Error moving file: ${err.message}`);
             await db.query('DELETE FROM items WHERE `name` = ? AND `description` = ? AND `price` = ? AND `condition` = ? AND `size` = ? AND `isbn` = ? AND `image` = ? AND `owner_id` = ?',
@@ -303,6 +316,7 @@ app.post('/sendEmail', async (req, res) => {
     try {
         let result = await emailer.sendMail(mail);
         let testMessageUrl = nodemailer.getTestMessageUrl(result);
+        db.query('UPDATE items SET sold = 1 WHERE item_id = ?', [itemId]);
         console.log("Email sent successfully, preview URL at: " + testMessageUrl);
         res.json({ success: true, message: 'Email sent successfully', previewUrl: testMessageUrl });
     } catch (err) {

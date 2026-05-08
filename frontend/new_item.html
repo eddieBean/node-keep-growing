@@ -76,7 +76,7 @@
                     rows="3"
                     required
                 ></textarea>
-                <small id="helpId" class="text-body-secondary">Help text</small>
+                <!-- <small id="helpId" class="text-body-secondary">Help text</small> -->
             </div>
             <div class="form-group mb-3">
                 <label for="price">*Price</label>
@@ -104,20 +104,33 @@
                 </select>
             </div>
             <div class="form-group mb-3">
-                <label for="size">Size</label>
+                <label for="size">Size (if applicable)</label>
                 <input
                     type="text"
                     name="size"
                     id="size"
                     class="form-control"
-                    placeholder=""
+                    placeholder="Size"
                     aria-describedby="item name entry"
                     
                 />
                 <!-- <small id="helpId" class="text-body-secondary" style="color: rgb(187, 8, 8);">Not required</small> -->
             </div>
             <div class="form-group mb-3">
-                <label for="ISBN">ISBN for books</label>
+                <label for="school">School of origin (if applicable)</label>
+                <input
+                    type="text"
+                    name="school"
+                    id="school"
+                    class="form-control"
+                    placeholder="School of origin"
+                    aria-describedby="School of origin"
+                    
+                />
+                <!-- <small id="helpId" class="text-body-secondary" style="color: rgb(187, 8, 8);">Not required</small> -->
+            </div>
+            <div class="form-group mb-3">
+                <label for="ISBN">ISBN (if applicable)</label>
                 <input
                     type="text"
                     name="ISBN"

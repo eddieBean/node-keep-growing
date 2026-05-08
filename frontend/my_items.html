@@ -23,6 +23,13 @@
         .tertiary-color{
             background-color: #fde71a;
         }
+        footer{
+            padding: 20px;
+            left: 0;
+            width: 100%;
+            bottom: 0;
+            position: fixed;
+        }
     </style>
     
 </head>
@@ -63,9 +70,9 @@
 
     <div class="p-5 m-3 rounded-3">
         <div class="container-lg py-5">
-            <h1 class="display-5 fw-bold ">Welcome to Keep Growing!</h1>
-            <p class="col-md-8 fs-4">The online marketplace for your outgrown school uniforms and dusty textbooks!</p>
-            <a class="btn btn-primary btn-lg" type="button" href="sign-up.html">Create your account now! &raquo;</a>
+            <h1 class="display-5 fw-bold ">Your Item Listings</h1>
+            <!-- <p class="col-md-8 fs-4">The online marketplace for your outgrown school uniforms and dusty textbooks!</p>
+            <a class="btn btn-primary btn-lg" type="button" href="sign-up.html">Create your account now! &raquo;</a> -->
         </div>
     </div>
     
@@ -76,15 +83,14 @@
     </div><!--/.container-->
 
 
-    <footer class="footer mt-auto bg-light fixed-bottom">
-        <div class="container d-flex flex-wrap justify-content-between align-items-center py-1 my-4 border-top">
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
             <a href="index.html"
                 class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none lh-1">
                 <img class="rounded" style="width: 30px; height: 30px;" src="/siteIcons/favicon.svg">
             </a>
             <span class="col-md-3 mb-0 text-muted">© 2024 Keep Growing</span>
         </div>
-    
     </footer>
         
 
@@ -93,12 +99,14 @@
         async function loadItems(){
             const container = document.getElementById("items-container")
             
-            const response = await fetch('/api/items/');
+            const response = await fetch('/api/user-items/');
             const items = await response.json();
-
+            let saleText = "";
             items.forEach(item => {
                 if (item.sold === 1){
-                    return;
+                    saleText = " (SOLD)";
+                } else {
+                    saleText = "LISTED";
                 }
                 const card = document.createElement('div');
                 console.log(item.name);
@@ -116,6 +124,7 @@
                 />
                 <h2 class = "item">${item.name}</h2>
                 <p class = "item">${item.description}</p>
+                <p><strong>${saleText}</strong></p>
                 <p><a class="btn btn-secondary" href="item.html?itemId=${item.item_id}">View Item &raquo;</a></p>`;
                 container.appendChild(card)
             });
@@ -152,8 +161,18 @@
             const searchQuery = formData.get('search');
             window.location.href = `search.html?search=${searchQuery}`;
         });
+        
+        async function checkLogin() {
+            const response = await fetch('/api/session');
+            const data = await response.json();
+            if (!data.loggedIn) {
+                alert('You must be logged in to post an item.');
+                window.location.href = 'login.html';
+            }
+        }
         document.addEventListener('DOMContentLoaded', updateNav);
         document.addEventListener('DOMContentLoaded', loadItems);
+        document.addEventListener('DOMContentLoaded', checkLogin);
     </script>
 </body>
 
