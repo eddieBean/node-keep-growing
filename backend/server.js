@@ -105,16 +105,16 @@ app.use('/images', express.static(path.join(__dirname, '..', 'frontend', 'images
 
 app.post('/signup', async (req, res) => {
 
-    const { email, password, phone } = req.body;
+    const {user_name, school, email, password, phone } = req.body;
     console.log(req.body.email, req.body.password, req.body.phone);
     try {
         //test if the email or phone number has already been used
-        const [existingEmail] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
-        if (existingEmail.length > 0) {
+        const [existingEmails] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+        if (existingEmails.length > 0) {
             return res.status(400).json({ success: false, message: 'An account with that email already exists' })
         }
-        const [existingPhone] = await db.query('SELECT * FROM users WHERE phone = ?', [phone]);
-        if (existingPhone.length > 0) {
+        const [existingPhones] = await db.query('SELECT * FROM users WHERE phone = ?', [phone]);
+        if (existingPhones.length > 0) {
             return res.status(400).json({ success: false, message: 'An account with that phone number already exists' })
         }
         //hash the password before storing it in the db
@@ -122,16 +122,16 @@ app.post('/signup', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         await db.query(
-            'INSERT INTO users (email, password, phone) VALUES (?, ?, ?)',
-            [email, hashedPassword, phone]
+            'INSERT INTO users (email, password, phone, user_name, school) VALUES (?, ?, ?, ?, ?)',
+            [email, hashedPassword, phone, user_name, school]
         );
         const userRows = await db.query('SELECT * FROM users WHERE email = ?', [email])
         req.session.user = userRows[0];
-        res.json({ success: true, message: 'Signup successful' });
+        return res.json({ success: true, message: 'Signup successful' });
 
     } catch (err) {
         console.error('[SIGNUP] Signup error', err.message);
-        res.status(500).json({ success: false, message: 'Signup failed' })
+        return res.status(500).json({ success: false, message: 'Signup failed' })
     }
 });
 

@@ -76,7 +76,7 @@
                     rows="3"
                     required
                 ></textarea>
-                <!-- <small id="helpId" class="text-body-secondary">Help text</small> -->
+                <small id="helpId" class="text-body-secondary">Include a specific description of your item to help others find it, along with brief detail on </small>
             </div>
             <div class="form-group mb-3">
                 <label for="price">*Price</label>
@@ -90,9 +90,11 @@
                     </div>
                 </div>
             </div>
+
+            <!-- TODO include category picker that the administrator user creates, after creating dropdown based searching for the search page -->
+
             <div class="form-group mb-3">
                 <label for="condition">*Condition</label>
-
                 <select class="form-control" id="condition" name="condition" required>
                     <option selected>Select your item's current condition</option>
                     <option value="Brand-new">Brand-new</option>
@@ -138,7 +140,6 @@
                     class="form-control"
                     placeholder="XXXXXXXXXXXXX"
                     aria-describedby="ISBN entry"
-                                  
                 />
                 <small id="helpId" class="text=text-body-secondary">ISBN-13</small>
             </div>
