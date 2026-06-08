@@ -61,7 +61,7 @@ app.use(fileUpload({
 let emailer;
 let testAccount;
 
-async function initEmailer() {
+/* async function initEmailer() {
     try {
         console.log('Attempting to create test email account...');
         testAccount = await nodemailer.createTestAccount();
@@ -79,6 +79,7 @@ async function initEmailer() {
         
         // Verify the connection
         await emailer.verify();
+
         console.log('[EMAILER] Email service initialized and verified');
         return true;
     } catch (err) {
@@ -96,7 +97,9 @@ initEmailer().then(success => {
     setTimeout(() => {
         app.listen(3000, () => console.log('Server running on port 3000'));
     }, 500);
-});
+}); */
+app.listen(3000, () => console.log('Server running on port 3000'));
+
 
 //serve data from pages specifically
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
@@ -299,7 +302,14 @@ app.post('/sendEmail', async (req, res) => {
         from: testAccount.user,
         to: recipient.email,
         subject: `Message from user "${escapeHtml(sender.user_name)}" about your listing "${escapeHtml(item.name)}"`,
-        text: `"${escapeHtml(sender.user_name)}"'s message:\n ${escapeHtml(content)} \n\nReply to ${escapeHtml(sender.user_name)} via text on ${escapeHtml(sender.phone)}`
+        text: `
+        Dear ${escapeHtml(sender.user_name)}, 
+        You have a response to your item posting ${escapeHtml(item.name)}!
+
+        "${escapeHtml(sender.user_name)}"'s message:
+        \n ${escapeHtml(content)} 
+        
+        \n\nReply to ${escapeHtml(sender.user_name)} via text on ${escapeHtml(sender.phone)}` 
     }
     console.log(JSON.stringify(mail));
     
