@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <head>
     <title>Sign Up - Keep Growing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="/siteIcons/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/siteIcons/favicon.svg" />
     <link rel="shortcut icon" href="/siteIcons/favicon.ico" />
@@ -20,8 +21,8 @@
             <input
                 type="text"
                 class="form-control"
-                id="username"
-                name="username"
+                id="user_name"
+                name="user_name"
                 placeholder="johndoe123"
                 required
             />
@@ -36,7 +37,7 @@
                 placeholder="My School"
                 required
             />
-            <label for="school" class="form-label">Enter all the schools you want to see items from</label>
+            <label for="school" class="form-label">Schools</label>
         </div>
         <div class="form-floating" style = "border-bottom-left-radius: 0; border-bottom-right-radius: 0; margin-bottom:15px">
             <input
@@ -72,7 +73,7 @@
             </div>
         </div>
 
-        <button class = "btn btn-outline-primary" type="submit">Sign in</button>
+        <button class = "btn btn-outline-primary" type="submit">Create Account</button>
     </form>
         <div class="alert alert-danger d-flex align-items-center" role="alert" id="errorAlert" style="display: none !important; margin-top: 20px;">
         <i class="fa-solid fa-triangle-exclamation bi flex-shrink-0 me-2" style="width: 24px; height: 24px;"></i>
@@ -83,13 +84,16 @@
 </main>
 
 <script>
-    document.getElementById('signUpForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const formData = new FormData(e.target);
+    //create an event listner for the form submission
+    document.getElementById('signUpForm').addEventListener('submit', async (event) => {
+        //prevent the default form behaviour
+        event.preventDefault();
+        //get the form data and convert it to a JSON object
+        const formData = new FormData(event.target);
         const data = Object.fromEntries(formData);
         
         try {
+            //send the data to the server
             const response = await fetch('/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -97,16 +101,16 @@
                 redirect: 'manual'
             });
             
-            const text = await response.json();
-            
-            if (response.status === 302 || response.status === 301) {
+            //server error handling
+            if (response.ok) {
                 // Success - redirect to home
                 window.location.href = '/';
             } else {
                 // Error - show alert with error message
-                document.getElementById('errorMessage').textContent = text;
+                document.getElementById('errorMessage').textContent = await response.json().message;
                 document.getElementById('errorAlert').style.display = 'flex';
             }
+        //frontend error handling
         } catch (err) {
             console.error('Login error:', err);
             document.getElementById('errorMessage').textContent = 'An error occurred. Please try again.';
