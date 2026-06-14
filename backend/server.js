@@ -214,7 +214,7 @@ app.get('/api/items/itemId/:itemId', async (req, res) => {
         const [rows] = await db.query('SELECT * FROM items WHERE item_id = ?', [itemId]);
         const sanitizedItems = rows.map(sanitizeItem);
         res.json(sanitizedItems);
-    } catch (err) {
+    } catch (err) { 
         console.error('database error:' + err.message);
         res.status(500).json({ error: 'Database error' });
     }
@@ -251,7 +251,7 @@ app.post('/api/items/upload', async (req, res) => {
     try {
         console.log('[UPLOAD/ITEM] Inserting item into database...');
         await db.query(
-            'INSERT INTO items (`name`, `description`, `price`, `condition`, `size`, `isbn`, `image`, `owner_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            'INSERT INTO items (`name`, `description`, `price`, `condition`, `size`, `isbn`, `image`,`school`, `owner_id`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [sanitizedName, sanitizedDescription, price, sanitizedCondition, sanitizedSize, sanitizedISBN, image_url, sanitizedSchool, owner_id]
         );
         console.log('[UPLOAD/ITEM] Success - Item inserted into database');
@@ -297,7 +297,7 @@ app.post('/sendEmail', async (req, res) => {
     if (!emailer) {
         return res.status(500).json({ success: false, message: '[EMAILER] Email service not ready' });
     }
-    
+    //TODO: change to use a real email sytem.
     const mail = {
         from: testAccount.user,
         to: recipient.email,
