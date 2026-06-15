@@ -9,7 +9,9 @@ const e = require('express');
 const fileUpload = require('express-fileupload');
 const nodemailer = require('nodemailer');
 const app = express();
+import { Resend } from 'resend';
 
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Sanitize text to prevent XSS attacks using REGEX!!!!
 function escapeHtml(text) {
@@ -98,6 +100,16 @@ initEmailer().then(success => {
         app.listen(3000, () => console.log('Server running on port 3000'));
     }, 500);
 }); */
+
+//this emailer works https://resend.com/docs/add-a-domain
+/* resend.emails.send({
+    from: 'onboarding@resend.dev',
+    to: 'ed.beaman@outlook.com',
+    subject: 'Hello World',
+    html: '<p>Congrats on sending your <strong>first email</strong>!</p>'
+}); */
+
+
 app.listen(3000, () => console.log('Server running on port 3000'));
 
 
