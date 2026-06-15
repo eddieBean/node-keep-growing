@@ -195,11 +195,39 @@ app.get('/api/user-items', async (req, res) => {
 });
 
 // Search Endpoint
-app.get('/api/items/:search', async (req, res) => {
-    const searchTerm = req.params.search;
+app.get('/api/search', async (req, res) => {
+    console.log("Search request received with query:", req.query);
+    const searchTerm = req.query.search || '';
+    const priceMax = req.query.priceMax === 'Infinity' ? Number.POSITIVE_INFINITY : Number.parseFloat(req.query.priceMax) || "Infinity";
+    const priceMin = Number.parseFloat(req.query.priceMin) || 0;
+    const size = req.query.size || '';
+    const condition = req.query.condition || '';
+
     try {
-        const [rows] = await db.query('SELECT * FROM items WHERE MATCH(name, description) AGAINST (?);', [searchTerm]);
+        let query = `SELECT * FROM items 
+            WHERE MATCH(name, description) AGAINST (?) 
+            AND price >= ?`;
+        const params = [searchTerm, priceMin];
+        if (priceMax != "Infinity") {
+            query += ' AND `price` <= ?';
+            params.push(priceMax);
+        }
+        if (size) {
+            query += ' AND `size` LIKE ?';
+            params.push(size);
+        }
+
+        if (condition) {
+            query += ' AND `condition` LIKE ?';
+            params.push(condition);
+        }
+        query += ' AND `sold` = 0'; // Only return unsold items
+        query += ';';
+        console.log("Constructed search query:\n", query, "\nwith params:", params);
+        const [rows] = await db.query(query, params);
         const sanitizedItems = rows.map(sanitizeItem);
+        console.log("Search query: " + searchTerm + " priceMax: " + priceMax + " priceMin: " + priceMin + " size: " + size + " condition: " + condition);
+        console.log(sanitizedItems);
         res.json(sanitizedItems);
     } catch (err) {
         console.error('Database error:', err.message);
@@ -209,6 +237,7 @@ app.get('/api/items/:search', async (req, res) => {
 
 // Item page endpoint
 app.get('/api/items/itemId/:itemId', async (req, res) => {
+    console.log("Item page request received for itemId:", req.params.itemId);
     const itemId = req.params.itemId;
     try{
         const [rows] = await db.query('SELECT * FROM items WHERE item_id = ?', [itemId]);
@@ -279,7 +308,7 @@ app.post('/sendEmail', async (req, res) => {
     let recipient, sender, item;
     try {
         const [recipientRows] = await db.query('SELECT email FROM users WHERE user_id = ?', [recipientId]);
-        const [senderRows] = await db.query('SELECT email, name, phone FROM users WHERE user_id = ?', [senderId]);
+        const [senderRows] = await db.query('SELECT email, user_name, phone FROM users WHERE user_id = ?', [senderId]);
         const [itemRows] = await db.query('SELECT name FROM items WHERE item_id = ?', [itemId]);
         if (recipientRows.length === 0 || senderRows.length === 0 || itemRows.length === 0) {
             return res.status(400).json({ success: false, message: 'Invalid sender, recipient, or item ID' });

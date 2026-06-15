@@ -51,13 +51,46 @@
     </nav>
 
     <h1 style="text-align: center; margin-top: 20px;">Search Results</h1>   
+    <div class ="container">
+        <div class="row">
+            <div class="col-4">
+                <!-- Price Filter -->
+                <h5 class="mb-3">Price</h5>
+                <form class="d-flex" id="priceFilters">
+                    <input class="form-control me-2" type="number" placeholder="minPrice" aria-label="minPrice price" name="minPrice">
+                    <input class="form-control me-2" type="number" placeholder="maxPrice" aria-label="maxPrice price" name="maxPrice">
+                    <button class="btn btn-outline-success" type="submit">Go</button>
+                </form>
 
-    <div class="container">
-        <div class="row row-cols-4 justify-content-center" id = "items-container">
+                <!-- Size Filter -->
+                <h5 class="mb-3">Size</h5>
+                <div class="list-group mb-4">
+                    <button class="list-group-item list-group-item-action size-filter">Small</button>
+                    <button class="list-group-item list-group-item-action size-filter">Medium</button>
+                    <button class="list-group-item list-group-item-action size-filter">Large</button>
+                    <button class="list-group-item list-group-item-action size-filter">Extra Large</button>
+                </div>
+
+                <!-- Condition Filter -->
+                <h5 class="mb-3">Condition</h5>
+                <div class="list-group">
+                    <button class="list-group-item list-group-item-action condition-filter">Brand-new</button>
+                    <button class="list-group-item list-group-item-action condition-filter">Excellent</button>
+                    <button class="list-group-item list-group-item-action condition-filter">Good</button>
+                    <button class="list-group-item list-group-item-action condition-filter">Okay</button>
+                    <button class="list-group-item list-group-item-action condition-filter">Well Worn</button>
+
+                </div>
+            </div>
+            <div class="col-8">
+                <div class = "container">
+                    <div class="row row-cols-4 justify-content-center" id = "items-container">
+                    </div>
+                </div>
+            </div>
         </div>
-    </div><!--/.container-->
+    </div>
 
-    
     <footer class="footer mt-auto bg-light" style="height:70px;">
         <div class="container d-flex flex-wrap justify-content-between align-items-center align-items-middle py-3 my-4">
             <a href="index.html"
@@ -71,14 +104,73 @@
 
 </main>
     <script>
-        async function loadItems(){
+        document.getElementById('priceFilters').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            let maxPrice = formData.get('maxPrice');
+            let minPrice = formData.get('minPrice');
+            sessionStorage.setItem('maxPrice', maxPrice);
+            sessionStorage.setItem('minPrice', minPrice);
+            const items = await getItems();
+            loadItems(items);
+        });
+
+        async function sizeFilterListeners(){
+            const sizeButtons = document.querySelectorAll('.size-filter');
+            sizeButtons.forEach(button => {
+                let size = button.textContent.trim();
+                button.addEventListener('click', async () => {
+                    sessionStorage.setItem('size', size);
+                    const items = await getItems();
+                    loadItems(items);
+                });
+            });
+        };
+        async function conditionFilterListeners(){
+            const conditionButtons = document.querySelectorAll('.condition-filter');
+            conditionButtons.forEach(button => {
+                let condition = button.textContent.trim();
+                button.addEventListener('click', async () => {
+                    sessionStorage.setItem('condition', condition);
+                    const items = await getItems();
+                    loadItems(items);
+                });
+            });
+        };
+
+        async function getItems() {
             let params = new URLSearchParams(window.location.search);
             let searchQuery = params.get('search') || '';
-            const response = await fetch(`/api/items/${searchQuery}`);
+            let maxPrice = 'Infinity';
+            let minPrice = 0;
+            let size = '';
+            let condition = '';
 
-            const container = document.getElementById("items-container")
+            if (sessionStorage.getItem('maxPrice')) {
+                maxPrice = sessionStorage.getItem('maxPrice');
+            }
+
+            if (sessionStorage.getItem('minPrice')) {
+                minPrice = sessionStorage.getItem('minPrice');
+            }
+
+            if (sessionStorage.getItem('size')) {
+                size = sessionStorage.getItem('size');
+            }
+            
+            if (sessionStorage.getItem('condition')) {
+                condition = sessionStorage.getItem('condition');
+            }
+
+            const response = await fetch(`/api/search?search=${searchQuery}&priceMax=${maxPrice}&priceMin=${minPrice}&size=${size}&condition=${condition}`);
             const items = await response.json();
+            return items;
+        }
 
+
+        async function loadItems(items) {
+            const container = document.getElementById("items-container");
+            container.innerHTML = ''; // Clear existing items
             items.forEach(item => {
                 const card = document.createElement('div');
                 console.log(item.name);
@@ -97,7 +189,7 @@
                 <h2 class = "item">${item.name}</h2>
                 <p class = "item">${item.description}</p>
                 <p><a class="btn btn-secondary" href="item.html?itemId=${item.item_id}">View Item &raquo;</a></p>`;
-                container.appendChild(card)
+                container.appendChild(card);
             });
         }
         
@@ -135,8 +227,19 @@
         const searchQuery = formData.get('search');
         window.location.href = `search.html?search=${searchQuery}`;
     });
-    document.addEventListener('DOMContentLoaded', updateNav);
-    document.addEventListener('DOMContentLoaded', loadItems);
+    document.addEventListener('DOMContentLoaded', async () => {
+        updateNav();
+        sizeFilterListeners();
+        conditionFilterListeners();
+        sessionStorage.setItem('maxPrice', 'Infinity');
+        sessionStorage.setItem('minPrice', 0);
+        sessionStorage.setItem('size', '');
+        sessionStorage.setItem('condition', '');
+        const items = await getItems();
+        loadItems(items);
+    });
+
+
     </script>
 </body>
 
