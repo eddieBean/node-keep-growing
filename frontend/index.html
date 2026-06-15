@@ -41,7 +41,7 @@
             <div class="collapse navbar-collapse" id="mainNavbar">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a href="#" class="nav-link active">Home</a><!--change to search bar-->
+                        <a href="index.html" class="nav-link active">Home</a>
                     </li> 
                     <li class="nav-item">
                         <a href="new_item.html" class="nav-link">New listing</a>
@@ -50,8 +50,8 @@
                         <a href="my_items.html" class="nav-link">My items</a>
                     </li>
                 </ul>
-                <a class = "btn me-2" href = "login.html" id = "login"><i class="fa-solid fa-arrow-right-to-bracket" style="font-size:40px;color:white"></i></a>
-                <button class = "btn me-2" id="usericon" type = "button" onclick="logout()"><i class="fas fa-user" style="font-size:40px;color:white"></i></button>
+                <a class = "btn me-2" href = "login.html" id = "login" style="color: white;">Log in/Sign up</a>
+                <button class = "btn me-2" id="usericon" type = "button" onclick="logout()" style="color: white;">Log out</button>
                 <form class="d-flex" id = "searchForm">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search" id = "searchInput">
                         <button class="btn btn-outline-success" type="submit">Search</button>
@@ -84,7 +84,6 @@
             </a>
             <span class="col-md-3 mb-0 text-muted">© 2026 Keep Growing</span>
         </div>
-    
     </footer>
         
 
@@ -103,9 +102,9 @@
                 const card = document.createElement('div');
                 console.log(item.name);
                 console.log(item.description);
-                card.className = 'col-md-3 col-6';
+                card.className = 'col-md-3 col-6 ';
                 card.innerHTML = `
-                <img 
+                <a href="item.html?itemId=${item.item_id}"><img 
                     src="/images/${item.image}" 
                     alt="${item.name}"
                     width="140" 
@@ -113,7 +112,7 @@
                     class="rounded"
                     style="object-fit: cover;"
                     onerror="this.src='/images/placeholder.jpg'"
-                />
+                /></a>
                 <h2 class = "item">${item.name}</h2>
                 <p class = "item">${item.description}</p>
                 <p><a class="btn btn-secondary" href="item.html?itemId=${item.item_id}">View Item &raquo;</a></p>`;

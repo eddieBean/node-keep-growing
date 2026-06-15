@@ -276,12 +276,10 @@ app.post('/api/items/upload', async (req, res) => {
 app.post('/sendEmail', async (req, res) => {
     const { senderId, recipientId, itemId, content } = req.body;
     console.log("message request received with data: senderId:" + senderId + " recipientId: "+ recipientId + " itemId: "+ itemId + " content: "+ content);
-    
-    
     let recipient, sender, item;
     try {
         const [recipientRows] = await db.query('SELECT email FROM users WHERE user_id = ?', [recipientId]);
-        const [senderRows] = await db.query('SELECT email, user_name, phone FROM users WHERE user_id = ?', [senderId]);
+        const [senderRows] = await db.query('SELECT email, name, phone FROM users WHERE user_id = ?', [senderId]);
         const [itemRows] = await db.query('SELECT name FROM items WHERE item_id = ?', [itemId]);
         if (recipientRows.length === 0 || senderRows.length === 0 || itemRows.length === 0) {
             return res.status(400).json({ success: false, message: 'Invalid sender, recipient, or item ID' });

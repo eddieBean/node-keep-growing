@@ -30,17 +30,17 @@
             <div class="collapse navbar-collapse" id="mainNavbar">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a href="#" class="nav-link active">Home</a><!--change to search bar-->
+                        <a href="index.html" class="nav-link">Home</a>
                     </li> 
                     <li class="nav-item">
-                        <a href="new_item.html" class="nav-link">New listing</a>
+                        <a href="new_item.html" class="nav-link active">New listing</a>
                     </li>
                     <li class="nav-item">
                         <a href="my_items.html" class="nav-link">My items</a>
                     </li>
                 </ul>
-                <a class = "btn me-2" href = "login.html" id = "login"><i class="fa-solid fa-arrow-right-to-bracket" style="font-size:40px;color:white"></i></a>
-                <button class = "btn me-2" id="usericon" type = "button" onclick="logout()"><i class="fas fa-user" style="font-size:40px;color:white"></i></button>
+                <a class = "btn me-2" href = "login.html" id = "login">Log in/Sign up</a>
+                <button class = "btn me-2" id="usericon" type = "button" onclick="logout()">Log out</button>
                 <form class="d-flex" id = "searchForm">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search" id = "searchInput">
                         <button class="btn btn-outline-success" type="submit">Search</button>
@@ -162,6 +162,17 @@
             <button class = "btn btn-outline-primary" type="submit">Post</button>
         </form>
     </div>
+
+    
+    <footer class="footer mt-auto bg-light" style="height:70px;">
+        <div class="container d-flex flex-wrap justify-content-between align-items-center align-items-middle py-3 my-4">
+            <a href="index.html"
+                class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none lh-1">
+                <img class="rounded" style="width: 40px; height: 40px;" src="/siteIcons/keepGrowingIcon.svg">
+            </a>
+            <span class="col-md-3 mb-0 text-muted">© 2026 Keep Growing</span>
+        </div>
+    </footer>
     
 </main>
 <script>
