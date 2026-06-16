@@ -9,9 +9,9 @@ const e = require('express');
 const fileUpload = require('express-fileupload');
 const nodemailer = require('nodemailer');
 const app = express();
-import { Resend } from 'resend';
+// import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Sanitize text to prevent XSS attacks using REGEX!!!!
 function escapeHtml(text) {
