@@ -85,7 +85,7 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroupPrepend">$</span>
                     </div>
-                    <input type="text" class="form-control" name = "price" id="price" placeholder="" aria-describedby="inputGroupPrepend" required>
+                    <input type="number" class="form-control" name = "price" id="price" placeholder="" aria-describedby="inputGroupPrepend" required>
                     <div class="invalid-feedback">
                     Please choose a username.
                     </div>
@@ -134,7 +134,7 @@
             <div class="form-group mb-3">
                 <label for="ISBN">ISBN (if applicable)</label>
                 <input
-                    type="text"
+                    type="number"
                     name="ISBN"
                     id="ISBN"
                     class="form-control"
@@ -190,6 +190,7 @@
         
         if(form){
             form.addEventListener('submit', async (event) => {
+                //default 
                 if(!form.checkValidity()){
                     event.preventDefault();
                     event.stopPropagation();
@@ -198,12 +199,17 @@
                     event.preventDefault();
                     const formData = new FormData(form);
                     const sessionResponse = await fetch('/api/session');
+                    
+                    //add the user from the session information
                     const sessionData = await sessionResponse.json();
                     formData.append('owner_id', sessionData.user.user_id);
+
+                    //POST the data to the backend
                     const response = await fetch('/api/items/upload', {
                         method: 'POST',
                         body: formData
                     });
+                    //recieve a response 
                     const result = await response.json();
                     if(response.ok && result.success === true){
                         alert('Item posted successfully!');
@@ -212,7 +218,6 @@
                     else{
                         alert('Failed to list item. Please try again. Error: ' + result.message);
                     }
-
             }
             form.classList.add('was-validated');
             });

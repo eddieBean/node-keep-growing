@@ -3,5 +3,8 @@
   "name": "node-keep-growing-backend",
   "version": "1.0.0",
   "description": "Backend server for node-keep-growing",
-  "main": "server.js"
+  "main": "server.js",
+  "dependencies": {
+    "resend": "^6.12.4"
+  }
 }
