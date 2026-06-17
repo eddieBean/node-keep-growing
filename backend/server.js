@@ -157,7 +157,6 @@ app.post('/login', async (req, res) => {
         if (rows.length === 0) {
             return res.status(400).json({ success: false, message: 'No account with that email exists' })
         }
-
         const user = rows[0];
         console.log("db response: " + user.email + user.password);
 
@@ -167,7 +166,6 @@ app.post('/login', async (req, res) => {
         }
         req.session.user = user;
         res.json({ success: true, message: 'Login successful' });
-
     } catch (err) {
         console.error('login error', err.message);
         res.status(500).json({ success: false, message: 'Login failed' })
@@ -213,7 +211,6 @@ app.get('/api/search', async (req, res) => {
     const priceMin = Number.parseFloat(req.query.priceMin) || 0;
     const size = req.query.size || '';
     const condition = req.query.condition || '';
-
     try {
         let query = `SELECT * FROM items 
             WHERE MATCH(name, description) AGAINST (?) 
@@ -227,7 +224,6 @@ app.get('/api/search', async (req, res) => {
             query += ' AND `size` LIKE ?';
             params.push(size);
         }
-
         if (condition) {
             query += ' AND `condition` LIKE ?';
             params.push(condition);
@@ -275,8 +271,6 @@ app.post('/api/items/upload', async (req, res) => {
     const uploadPath = path.join(__dirname, '..', 'frontend', 'images', uploadedImage.name);
     console.log(`[UPLOAD/IMAGE] Target path: ${uploadPath}`);
     const image_url = uploadedImage.name;
-
-
 
     const {name, description, price, condition, size, ISBN, school, owner_id} = req.body;
     // Sanitize user input to prevent XSS
