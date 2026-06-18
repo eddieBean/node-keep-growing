@@ -65,6 +65,7 @@
                 <!-- Size Filter -->
                 <h5 class="mb-3">Size</h5>
                 <div class="list-group mb-4">
+                    <button class="list-group-item list-group-item-action size-filter active">Any</button>
                     <button class="list-group-item list-group-item-action size-filter">Small</button>
                     <button class="list-group-item list-group-item-action size-filter">Medium</button>
                     <button class="list-group-item list-group-item-action size-filter">Large</button>
@@ -74,6 +75,7 @@
                 <!-- Condition Filter -->
                 <h5 class="mb-3">Condition</h5>
                 <div class="list-group">
+                    <button class="list-group-item list-group-item-action condition-filter active">Any</button>
                     <button class="list-group-item list-group-item-action condition-filter">Brand-new</button>
                     <button class="list-group-item list-group-item-action condition-filter">Excellent</button>
                     <button class="list-group-item list-group-item-action condition-filter">Good</button>
@@ -114,13 +116,15 @@
             const items = await getItems();
             loadItems(items);
         });
-
+        
         async function sizeFilterListeners(){
             const sizeButtons = document.querySelectorAll('.size-filter');
             sizeButtons.forEach(button => {
-                let size = button.textContent.trim();
+                let size = button.textContent.trim()!== "Any" ? button.textContent.trim() : '';
                 button.addEventListener('click', async () => {
                     sessionStorage.setItem('size', size);
+                    document.querySelectorAll('.size-filter').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
                     const items = await getItems();
                     loadItems(items);
                 });
@@ -129,9 +133,11 @@
         async function conditionFilterListeners(){
             const conditionButtons = document.querySelectorAll('.condition-filter');
             conditionButtons.forEach(button => {
-                let condition = button.textContent.trim();
+                let condition = button.textContent.trim() !== "Any" ? button.textContent.trim() : '';
                 button.addEventListener('click', async () => {
                     sessionStorage.setItem('condition', condition);
+                    document.querySelectorAll('.condition-filter').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
                     const items = await getItems();
                     loadItems(items);
                 });
@@ -141,28 +147,26 @@
         async function getItems() {
             let params = new URLSearchParams(window.location.search);
             let searchQuery = params.get('search') || '';
-            let maxPrice = 'Infinity';
-            let minPrice = 0;
-            let size = '';
-            let condition = '';
-
-            if (sessionStorage.getItem('maxPrice')) {
-                maxPrice = sessionStorage.getItem('maxPrice');
-            }
-
-            if (sessionStorage.getItem('minPrice')) {
-                minPrice = sessionStorage.getItem('minPrice');
-            }
-
-            if (sessionStorage.getItem('size')) {
-                size = sessionStorage.getItem('size');
-            }
-            
-            if (sessionStorage.getItem('condition')) {
-                condition = sessionStorage.getItem('condition');
-            }
-
-            const response = await fetch(`/api/search?search=${searchQuery}&priceMax=${maxPrice}&priceMin=${minPrice}&size=${size}&condition=${condition}`);
+            let searchCategories = new map ([
+                ['priceMax', 'Infinity'],
+                ['priceMin', 0],
+                ['size', ''],
+                ['condition', '']
+            ]);
+            searchCategories.forEach((defaultValue, key) => {
+                if (sessionStorage.getItem(key)) {
+                    searchCategories.set(key, sessionStorage.getItem(key));
+                } else {
+                    searchCategories.set(key, defaultValue);
+                }
+            });
+            const response = await fetch(`
+                /api/search?search=${searchQuery}
+                &priceMax=${searchCategories.get("priceMax")}
+                &priceMin=${searchCategories.get("priceMin")}
+                &size=${searchCategories.get("size")}
+                &condition=${searchCategories.get("condition")}`
+            );
             const items = await response.json();
             return items;
         }

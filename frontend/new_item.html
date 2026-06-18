@@ -98,7 +98,16 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroupPrepend">$</span>
                     </div>
-                    <input type="text" class="form-control" name = "price" id="price" placeholder="" aria-describedby="inputGroupPrepend" required pattern="^\d+(\.\d{1,2})?$" title="Please enter a valid price (e.g., 19.99)">
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        name = "price" 
+                        id="price" 
+                        placeholder="" 
+                        aria-describedby="inputGroupPrepend" 
+                        required pattern="^\d+(\.\d{1,2})?$" 
+                        title="Please enter a valid price (e.g., 19.99)"
+                    >
                     <div class="invalid-feedback">
                     Please choose a username.
                     </div>
@@ -148,7 +157,7 @@
                 <label for="ISBN">ISBN (if applicable)</label>
                 <!-- regex pattern to check ISBN found from internet https://regex101.com/library/B7IVw2?orderBy=RELEVANCE&search=ISBN -->
                 <input
-                    type="number"
+                    type="text"
                     name="ISBN"
                     id="ISBN"
                     class="form-control"
