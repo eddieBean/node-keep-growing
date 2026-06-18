@@ -213,14 +213,12 @@
                 else{
                     event.preventDefault();
                     //get the form data and convert it to a JSON object
-                    const formData = new FormData(form);
+                    const formData = new FormData(form); 
                     //get the user id from the session and add it to the form data
-                    const sessionResponse = await fetch('/api/session');
-                    
+                    const sessionResponse = await fetch('/api/session'); 
                     //add the user from the session information
-                    const sessionData = await sessionResponse.json();
+                    const sessionData = await sessionResponse.json(); 
                     formData.append('owner_id', sessionData.user.user_id);
-
                     //POST the data to the backend
                     const response = await fetch('/api/items/upload', {
                         method: 'POST',
@@ -235,11 +233,8 @@
                         //redirect to home
                         window.location.href = 'index.html';
                     }
-                    else{
-                        alert('Failed to list item. Please try again. Error: ' + result.message);
-                    }
-            }
-
+                    else{alert('Failed to list item. Please try again. Error: ' + result.message);}
+                }
             });
         }
     })();

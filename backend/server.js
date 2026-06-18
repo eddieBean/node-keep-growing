@@ -8,7 +8,7 @@ const db = require('./db');
 const e = require('express');
 const fileUpload = require('express-fileupload');
 const nodemailer = require('nodemailer');
-//const { Resend } = require('resend');
+//const emailer = require('resend');
 const app = express();
 //const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -275,8 +275,6 @@ app.post('/api/items/upload', async (req, res) => {
     const uploadPath = path.join(__dirname, '..', 'frontend', 'images', uploadedImage.name);
     console.log(`[UPLOAD/IMAGE] Target path: ${uploadPath}`);
     const image_url = uploadedImage.name;
-
-
 
     const {name, description, price, condition, size, ISBN, school, owner_id} = req.body;
     // Sanitize user input to prevent XSS
