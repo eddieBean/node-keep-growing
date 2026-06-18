@@ -8,9 +8,10 @@ const db = require('./db');
 const e = require('express');
 const fileUpload = require('express-fileupload');
 const nodemailer = require('nodemailer');
-//const emailer = require('resend');
+const { Resend } = require('resend');
 const app = express();
-//const resend = new Resend(process.env.RESEND_API_KEY);
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Sanitize text to prevent XSS attacks using REGEX!!!!
 function escapeHtml(text) {
@@ -59,8 +60,8 @@ app.use(fileUpload({
     safeFileNames: /[<>"'&]/g
 }));
 
-let emailer;
-let testAccount;
+// let emailer;
+// let testAccount;
 
 /* async function initEmailer() {
     try {
@@ -100,13 +101,6 @@ initEmailer().then(success => {
     }, 500);
 }); */
 
-//this emailer works https://resend.com/docs/add-a-domain
-/* resend.emails.send({
-    from: 'onboarding@resend.dev',
-    to: 'ed.beaman@outlook.com',
-    subject: 'Hello World',
-    html: '<p>Congrats on sending your <strong>first email</strong>!</p>'
-}); */
 
 
 app.listen(3000, () => console.log('Server running on port 3000'));
@@ -118,7 +112,6 @@ app.use('/images', express.static(path.join(__dirname, '..', 'frontend', 'images
 
 
 app.post('/signup', async (req, res) => {
-
     const {user_name, school, email, password, phone } = req.body;
     console.log(req.body.email, req.body.password, req.body.phone);
     try {
@@ -139,7 +132,7 @@ app.post('/signup', async (req, res) => {
             'INSERT INTO users (email, password, phone, user_name, school) VALUES (?, ?, ?, ?, ?)',
             [email, hashedPassword, phone, user_name, school]
         );
-        const userRows = await db.query('SELECT * FROM users WHERE email = ?', [email])
+        const [userRows] = await db.query('SELECT * FROM users WHERE email = ?', [email])
         req.session.user = userRows[0];
         return res.json({ success: true, message: 'Signup successful' });
 
@@ -326,13 +319,10 @@ app.post('/sendEmail', async (req, res) => {
         return res.status(500).json({ success: false, message: '[SEND-EMAIL] Database error' });
     }
     
-    if (!emailer) {
-        return res.status(500).json({ success: false, message: '[EMAILER] Email service not ready' });
-    }
     //TODO: change to use a real email sytem.
     const mail = {
-        from: testAccount.user,
-        to: recipient.email,
+        from: 'communications@keep-growing.net',
+        to: 'test-email-reciever@ioziloorin.resend.app',
         subject: `Message from user "${escapeHtml(sender.user_name)}" about your listing "${escapeHtml(item.name)}"`,
         text: `
         Dear ${escapeHtml(sender.user_name)}, 
@@ -346,7 +336,7 @@ app.post('/sendEmail', async (req, res) => {
     console.log(JSON.stringify(mail));
     
     try {
-        let result = await emailer.sendMail(mail);
+        let result = await resend.emails.send(mail);
         let testMessageUrl = nodemailer.getTestMessageUrl(result);
         db.query('UPDATE items SET sold = 1 WHERE item_id = ?', [itemId]);
         console.log("Email sent successfully, preview URL at: " + testMessageUrl);
@@ -356,6 +346,15 @@ app.post('/sendEmail', async (req, res) => {
         res.status(500).json({ success: false, message: 'Failed to send email' });
     }
 });
+
+//this emailer works https://resend.com/docs/add-a-domain
+/* resend.emails.send({
+    from: 'onboarding@resend.dev',
+    to: 'ed.beaman@outlook.com',
+    subject: 'Hello World',
+    html: '<p>Congrats on sending your <strong>first email</strong>!</p>'
+}); */
+
 
 //session endpoint
 app.get('/api/session', (req, res) => {

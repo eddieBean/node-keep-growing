@@ -67,9 +67,9 @@
             <label for="phone" class="form-label">Phone Number</label>
             <div class="input-group input-group-lg">
                 <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroupPrepend">+61</span>
+                    <span class="input-group-text" id="inputGroupPrepend" style="height:58px">+61</span>
                 </div>
-                <input type="text" class="form-control" name="phone" id="phone" placeholder="412 345 678" />
+                <input style="height:58px" type="text" class="form-control" name="phone" id="phone" placeholder="412 345 678" />
             </div>
         </div>
 
@@ -107,7 +107,8 @@
                 window.location.href = '/';
             } else {
                 // Error - show alert with error message
-                document.getElementById('errorMessage').textContent = await response.json().message;
+                const errorData = await response.json();
+                document.getElementById('errorMessage').textContent = errorData.message;
                 document.getElementById('errorAlert').style.display = 'flex';
             }
         //frontend error handling

@@ -14,6 +14,22 @@
     <script src="https://kit.fontawesome.com/ea958534a3.js" crossorigin="anonymous"></script>
     <style>
         .item {max-width: 140px; min-width: 0;}
+        main {
+        position: relative;
+        }
+        main::after {
+        content: '';
+        display: block;
+        height: 70px;
+        /* Set same as footer's height */
+        }
+
+        footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 70px;
+        }
     </style>
     
 </head>
@@ -93,8 +109,9 @@
         </div>
     </div>
 
-    <footer class="footer mt-auto bg-light" style="height:70px;">
-        <div class="container d-flex flex-wrap justify-content-between align-items-center align-items-middle py-3 my-4">
+</main>
+    <footer class="footer bg-light d-flex align-items-middle" style="height:70px;">
+        <div class="container d-flex flex-wrap justify-content-between align-items-center align-items-middle">
             <a href="index.html"
                 class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none lh-1">
                 <img class="rounded" style="width: 40px; height: 40px;" src="/siteIcons/keepGrowingIcon.svg">
@@ -102,9 +119,6 @@
             <span class="col-md-3 mb-0 text-muted">© 2026 Keep Growing</span>
         </div>
     </footer>
-
-
-</main>
     <script>
         document.getElementById('priceFilters').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -145,28 +159,29 @@
         };
 
         async function getItems() {
-            let params = new URLSearchParams(window.location.search);
-            let searchQuery = params.get('search') || '';
-            let searchCategories = new map ([
-                ['priceMax', 'Infinity'],
-                ['priceMin', 0],
-                ['size', ''],
-                ['condition', '']
-            ]);
-            searchCategories.forEach((defaultValue, key) => {
-                if (sessionStorage.getItem(key)) {
-                    searchCategories.set(key, sessionStorage.getItem(key));
-                } else {
-                    searchCategories.set(key, defaultValue);
-                }
-            });
-            const response = await fetch(`
-                /api/search?search=${searchQuery}
-                &priceMax=${searchCategories.get("priceMax")}
-                &priceMin=${searchCategories.get("priceMin")}
-                &size=${searchCategories.get("size")}
-                &condition=${searchCategories.get("condition")}`
-            );
+            let params = new URLSearchParams(window.location.search); // Get search query from URL
+            //set default values for filters if not set
+            let searchQuery = params.get('search') || ''; 
+            let maxPrice = 'Infinity';
+            let minPrice = 0;
+            let size = '';
+            let condition = '';
+            //check session storage for filter values and update if they exist
+            if (sessionStorage.getItem('maxPrice')) {
+                maxPrice = sessionStorage.getItem('maxPrice');
+            }
+            if (sessionStorage.getItem('minPrice')) {
+                minPrice = sessionStorage.getItem('minPrice');
+            }
+            if (sessionStorage.getItem('size')) {
+                size = sessionStorage.getItem('size');
+            }
+            if (sessionStorage.getItem('condition')) {
+                condition = sessionStorage.getItem('condition');
+            }
+            //send request to server with query and filter parameters
+            const response = await fetch(`/api/search?search=${searchQuery}&priceMax=${maxPrice}&priceMin=${minPrice}&size=${size}&condition=${condition}`);
+            //return the items from the server
             const items = await response.json();
             return items;
         }
